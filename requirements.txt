@@ -1,0 +1,6 @@
+flask
+flask-sqlalchemy
+psycopg2
+flask_script
+flask_migrate
+pandas
