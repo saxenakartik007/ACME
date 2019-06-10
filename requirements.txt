@@ -3,4 +3,9 @@ flask-sqlalchemy
 psycopg2
 flask_script
 flask_migrate
+flask-paginate
 pandas
+redis
+watch
+pika
+dramatiq

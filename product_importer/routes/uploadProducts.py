@@ -1,16 +1,16 @@
 import os
 from flask import Blueprint, request, make_response
 from werkzeug.utils import secure_filename
-import  threading
+from..uploadFileTask import handle_file
+
+from ..models import db,Products
 import pandas as pd
-from  ..models import Products
-from ..models import db
-import asyncio
 from multiprocessing.pool import ThreadPool as Pool
 upload_products = Blueprint('upload',  __name__,
                         template_folder='templates')
 
 t = Pool(processes=20)
+
 
 @upload_products.route('/upload', methods=['POST'])
 def upload():
@@ -37,17 +37,14 @@ def upload():
          #store_data_in_db(save_path)
          # t.join()
          # t.close()
-         loop.run_until_complete(handle_file(save_path))
+         #handle_file.send(save_path)
+         handle_file(save_path)
     return make_response(('Chunk', 200))
-loop = asyncio.get_event_loop()
 
-async def handle_file(save_path):
+def handle_file(save_path):
     f = get_next_record(save_path)
     for i in f:
         t.map(store_in_db, (i,))
-
-    return await None
-
 
 def get_next_record(file):
     df = pd.read_csv(file, sep=',')
@@ -88,6 +85,10 @@ def store_data_in_db(file,db):
     except Exception as e :
                  print(e)
     db.session.commit()
+
+
+
+
 
 
 
