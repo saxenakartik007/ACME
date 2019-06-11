@@ -1,10 +1,15 @@
-import dramatiq
+from flask_dramatiq import Dramatiq
 from multiprocessing.pool import ThreadPool as Pool
 import pandas as pd
-from .models import Products,db
+from product_importer.models import Products,db
 from dramatiq.brokers.redis import RedisBroker
-broker = RedisBroker()
-dramatiq.set_broker(broker)
+from flask_dramatiq import Dramatiq
+
+
+dramatiq=Dramatiq()
+def createdramtatiq(app):
+    dramatiq.init_app(app)
+    app.app_context().push()
 
 t = Pool(processes=20)
 
@@ -46,7 +51,7 @@ def store_in_db(dataset):
 
 
 def store_data_in_db(file,db):
-    db.session.query(Products).delete()
+    Products.query.delete()
     db.session.commit()
     import pandas as pd
     df = pd.read_csv(file, sep=',', header=None)

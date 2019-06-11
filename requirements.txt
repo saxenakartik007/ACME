@@ -9,3 +9,4 @@ redis==3.2.1
 watch==0.2.7
 pika==1.0.1
 dramatiq==1.6.0
+flask-dramatiq==0.4.1

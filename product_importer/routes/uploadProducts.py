@@ -1,10 +1,11 @@
 import os
 from flask import Blueprint, request, make_response
 from werkzeug.utils import secure_filename
-from..uploadFileTask import handle_file
+from uploadFileTask import handle_file
 
 from ..models import db,Products
 import pandas as pd
+#from uploadFileTask import handle_file
 from multiprocessing.pool import ThreadPool as Pool
 upload_products = Blueprint('upload',  __name__,
                         template_folder='templates')
@@ -73,9 +74,8 @@ def store_in_db(dataset):
 
 
 def store_data_in_db(file,db):
-    db.session.query(Products).delete()
+    Products.query.delete()
     db.session.commit()
-    import csv
     import pandas as pd
     df = pd.read_csv(file, sep=',', header=None)
     try:
